@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "316331304544",
+    "firebase_url": "https://blog-app-b5628.firebaseio.com",
+    "project_id": "blog-app-b5628",
+    "storage_bucket": "blog-app-b5628.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316331304544:android:d533f86e6960634c2d8505",
+        "android_client_info": {
+          "package_name": "co.ansari.blog_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316331304544-o0182fipio941g6a27ij9ch1gcspo1mq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQE9TNVoijjSOCJiBN9S6rg5dAlWFhlHU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316331304544-o0182fipio941g6a27ij9ch1gcspo1mq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,13 +1,41 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class LoginAndRegister extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _LoginAndRegisterState createState() => _LoginAndRegisterState();
 }
 
-class _LoginState extends State<Login> {
-  void validateAndSave() {}
-  void moveToRegister() {}
+enum FormType { login, register }
+
+class _LoginAndRegisterState extends State<LoginAndRegister> {
+  var formKey = new GlobalKey<FormState>();
+  FormType _formType = FormType.login;
+  String _email = "";
+  String _password = "";
+
+  bool validateAndSave() {
+    final form = formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void moveToRegister() {
+    formKey.currentState.reset();
+    setState(() {
+      _formType = FormType.register;
+    });
+  }
+
+  void moveToLogin() {
+    formKey.currentState.reset();
+    setState(() {
+      _formType = FormType.login;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +46,7 @@ class _LoginState extends State<Login> {
       body: Container(
         margin: EdgeInsets.all(15.0),
         child: Form(
+          key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: createInputs() + createButton(),
@@ -38,12 +67,25 @@ class _LoginState extends State<Login> {
       ),
       TextFormField(
         decoration: InputDecoration(labelText: 'Email'),
+        validator: (value) {
+          return value.isEmpty ? "Email is required" : null;
+        },
+        onSaved: (value) {
+          return _email = value;
+        },
       ),
       SizedBox(
         height: 10.0,
       ),
       TextFormField(
+        obscureText: true,
         decoration: InputDecoration(labelText: 'Password'),
+        validator: (value) {
+          return value.isEmpty ? "Password is required" : null;
+        },
+        onSaved: (value) {
+          return _password = value;
+        },
       ),
       SizedBox(
         height: 20.0,
@@ -62,29 +104,54 @@ class _LoginState extends State<Login> {
   }
 
   List<Widget> createButton() {
-    return [
-      RaisedButton(
-        child: Text(
-          'Login',
-          style: TextStyle(
-            fontSize: 20.0,
+    if (_formType == FormType.login) {
+      return [
+        RaisedButton(
+          child: Text(
+            'Register',
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
           ),
+          textColor: Colors.white,
+          color: Colors.lightBlueAccent,
+          onPressed: validateAndSave,
         ),
-        textColor: Colors.white,
-        color: Colors.lightBlueAccent,
-        onPressed: validateAndSave,
-      ),
-      FlatButton(
-        child: Text(
-          "Don't have an Account? Click to Create Account",
-          style: TextStyle(
-            fontSize: 14.0,
+        FlatButton(
+          child: Text(
+            "Already have an Account? Click here to Login",
+            style: TextStyle(
+              fontSize: 14.0,
+            ),
           ),
+          textColor: Colors.blue,
+          onPressed: moveToLogin,
+        )
+      ];
+    } else {
+      return [
+        RaisedButton(
+          child: Text(
+            'Login',
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          textColor: Colors.white,
+          color: Colors.lightBlueAccent,
+          onPressed: validateAndSave,
         ),
-        textColor: Colors.white,
-        color: Colors.blue,
-        onPressed: moveToRegister,
-      )
-    ];
+        FlatButton(
+          child: Text(
+            "Don't have an Account? Click to Create Account",
+            style: TextStyle(
+              fontSize: 14.0,
+            ),
+          ),
+          textColor: Colors.red,
+          onPressed: moveToRegister,
+        )
+      ];
+    }
   }
 }
