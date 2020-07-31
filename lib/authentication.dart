@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class Authentication {
-  Future<String> SignIn(String email, String password);
-  Future<String> SignUp(String email, String password);
+  Future<String> signIn(String email, String password);
+  Future<String> signUp(String email, String password);
   Future<String> getCurrentUser();
   Future<void> signOut();
 }
@@ -11,14 +10,14 @@ abstract class Authentication {
 class Auth implements Authentication {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  Future<String> SignIn(String email, String password) async {
+  Future<String> signIn(String email, String password) async {
     FirebaseUser user = (await _firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password))
         .user;
     return user.uid;
   }
 
-  Future<String> SignUp(String email, String password) async {
+  Future<String> signUp(String email, String password) async {
     FirebaseUser user = (await _firebaseAuth.createUserWithEmailAndPassword(
             email: email, password: password))
         .user;

@@ -59,6 +59,10 @@ class _MappingPageState extends State<MappingPage> {
           auth: widget.authenticate,
           onSignedOut: _signedOut,
         );
+      default:
+        return Container(
+          child: Center(child: Text('Error in app')),
+        );
     }
   }
 }

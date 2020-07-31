@@ -18,7 +18,7 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
   DialogBox dialogBox = DialogBox();
   var formKey = new GlobalKey<FormState>();
   FormType _formType = FormType.login;
-  String _email = "";
+  String email = "";
   String _password = "";
 
   bool validateAndSave() {
@@ -49,9 +49,9 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
     if (validateAndSave()) {
       try {
         if (_formType == FormType.login) {
-          String userId = await widget.auth.SignIn(_email, _password);
+          await widget.auth.signIn(email, _password);
         } else {
-          String userId = await widget.auth.SignUp(_email, _password);
+          await widget.auth.signUp(email, _password);
         }
         widget.onSignedIn();
       } catch (e) {
@@ -95,7 +95,7 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
           return value.isEmpty ? "Email is required" : null;
         },
         onSaved: (value) {
-          return _email = value;
+          return email = value;
         },
       ),
       SizedBox(

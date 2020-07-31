@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 
 class UploadPhotoPage extends StatefulWidget {
@@ -17,6 +18,8 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
   var formKey = GlobalKey<FormState>();
   String _myvalue;
   String url;
+  var userEmail;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future getImage() async {
     final tempImage = await picker.getImage(source: ImageSource.gallery);
@@ -67,6 +70,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
       'description': _myvalue,
       'date': date,
       'time': time,
+      'userEmail': userEmail,
     };
     databaseReference.child('Posts').push().set(data);
   }
@@ -75,6 +79,18 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return HomePage();
     }));
+  }
+
+  Future<String> getCurrentUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    userEmail = user.email;
+    return user.email;
+  }
+
+  @override
+  void initState() {
+    getCurrentUser();
+    super.initState();
   }
 
   @override
@@ -91,7 +107,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
         onPressed: getImage,
         tooltip: "Add Image",
         child: Icon(
-          Icons.add_a_photo,
+          Icons.add_photo_alternate,
           size: 30.0,
         ),
       ),
@@ -114,9 +130,10 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
             ),
             Divider(),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
+              height: MediaQuery.of(context).size.height * 0.3,
               width: MediaQuery.of(context).size.width * 0.9,
               child: TextFormField(
+                keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
                   labelText: 'Caption it',
                 ),
@@ -129,7 +146,7 @@ class _UploadPhotoPageState extends State<UploadPhotoPage> {
               ),
             ),
             SizedBox(
-              height: 15.0,
+              height: 10.0,
             ),
             RaisedButton(
               elevation: 10.0,
