@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'authentication.dart';
 
 class HomePage extends StatefulWidget {
+  final Authentication auth;
+  final VoidCallback onSignedOut;
+
+  HomePage({this.auth, this.onSignedOut});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  logOut() {}
+  logOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.onSignedOut();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +44,6 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white,
                 onPressed: logOut,
               ),
-              Divider(),
               IconButton(
                 icon: Icon(
                   Icons.add_a_photo,

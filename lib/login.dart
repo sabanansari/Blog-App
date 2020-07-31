@@ -1,6 +1,13 @@
+import 'package:blog_app/authentication.dart';
 import 'package:flutter/material.dart';
+import 'authentication.dart';
+import 'dialogBox.dart';
 
 class LoginAndRegister extends StatefulWidget {
+  final Authentication auth;
+  final VoidCallback onSignedIn;
+
+  LoginAndRegister({this.auth, this.onSignedIn});
   @override
   _LoginAndRegisterState createState() => _LoginAndRegisterState();
 }
@@ -35,6 +42,20 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
     setState(() {
       _formType = FormType.login;
     });
+  }
+
+  void validateAndSubmit() async {
+    if (validateAndSave()) {
+      try {
+        if (_formType == FormType.login) {
+          String userId = await widget.auth.SignIn(_email, _password);
+        } else {
+          String userId = await widget.auth.SignUp(_email, _password);
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   @override
@@ -94,17 +115,19 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
   }
 
   Widget logo() {
-    return Hero(
-      tag: 'logo',
-      child: CircleAvatar(
-        radius: 110.0,
-        child: Image.asset('images/blog.png'),
+    return Flexible(
+      child: Hero(
+        tag: 'logo',
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Image.asset('images/blog.png'),
+        ),
       ),
     );
   }
 
   List<Widget> createButton() {
-    if (_formType == FormType.login) {
+    if (_formType == FormType.register) {
       return [
         RaisedButton(
           child: Text(
@@ -115,7 +138,7 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
           ),
           textColor: Colors.white,
           color: Colors.lightBlueAccent,
-          onPressed: validateAndSave,
+          onPressed: validateAndSubmit,
         ),
         FlatButton(
           child: Text(
@@ -139,7 +162,7 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
           ),
           textColor: Colors.white,
           color: Colors.lightBlueAccent,
-          onPressed: validateAndSave,
+          onPressed: validateAndSubmit,
         ),
         FlatButton(
           child: Text(

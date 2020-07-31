@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'mapping.dart';
+import 'authentication.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,7 +16,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: LoginAndRegister(),
+      home: MappingPage(
+        authenticate: Auth(),
+      ),
     );
   }
 }
