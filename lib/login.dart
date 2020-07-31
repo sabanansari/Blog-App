@@ -15,6 +15,7 @@ class LoginAndRegister extends StatefulWidget {
 enum FormType { login, register }
 
 class _LoginAndRegisterState extends State<LoginAndRegister> {
+  DialogBox dialogBox = DialogBox();
   var formKey = new GlobalKey<FormState>();
   FormType _formType = FormType.login;
   String _email = "";
@@ -49,10 +50,15 @@ class _LoginAndRegisterState extends State<LoginAndRegister> {
       try {
         if (_formType == FormType.login) {
           String userId = await widget.auth.SignIn(_email, _password);
+          dialogBox.information(context, "", "Logged In Successfully");
         } else {
           String userId = await widget.auth.SignUp(_email, _password);
+          dialogBox.information(context, "Congratulations!",
+              "Your account has been successfully created");
         }
+        widget.onSignedIn();
       } catch (e) {
+        dialogBox.information(context, "Error:", e.toString());
         print(e);
       }
     }
